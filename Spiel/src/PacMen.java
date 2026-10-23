@@ -121,6 +121,7 @@ public class PacMen extends JPanel implements ActionListener,KeyListener {
         boolean gameOver = false;
         String live ="♡";
         boolean scarry = false;
+        int wins = 0;
 
 
 
@@ -149,6 +150,29 @@ public class PacMen extends JPanel implements ActionListener,KeyListener {
         "X           c     X",
         "XXXXXXXXXXXXXXXXXXX" 
     };
+private String[] tileMapTwo = {
+    "XXXXXXXXXXXXXXXXXXX",
+    "X XX XXX X XXX XX X",
+    "X    X       X    X",
+    "X           c     X",
+    "X XX X XXXXX X XX X",
+    "X        X        X",
+    "XXXX X       X XXXX",
+    "OOOX X       X XOOO",
+    "XXXX X XXrXX X XXXX",
+    "O  c    bpo       O",
+    "XXXX X XXXXX X XXXX",
+    "OOOX X       X XOOO",
+    "X XX XXX X XXX XX X",
+    "X    X   X   X    X",
+    "X XXXXXX X XXXXXX X",
+    "X  X     P     X  X",
+    "XX X X XXXXX X X XX",
+    "X XX X XXXXX X XX X",
+    "X     X           X",
+    "X           c     X",
+    "XXXXXXXXXXXXXXXXXXX"
+};
 
 
 
@@ -192,8 +216,10 @@ public class PacMen extends JPanel implements ActionListener,KeyListener {
         
         for (int r = 0; r < rowCount; r++) {
             for (int c = 0; c < columnCount; c++) {
-                String row = tileMap[r];
-                char tileMapChar = row.charAt(c);
+                if (wins >= 1){
+                    tileMap = tileMapTwo;
+                }
+                char tileMapChar = tileMap[r].charAt(c);
 
                 int x = c*tileSize;
                 int y = r*tileSize;
@@ -316,11 +342,13 @@ public class PacMen extends JPanel implements ActionListener,KeyListener {
         for (Block cherry: cherrys){
             if (collision(cherry, pacmen)){
                 scare();
-                
                 score += 30;
                 cherryEaten = cherry;
                 System.out.println("Scarring the Ghosts!");
+                break;
             }
+        }
+        if (cherryEaten != null){
             cherrys.remove(cherryEaten);
         }
         java.util.List<Block> ghostsToRemove = new java.util.ArrayList<>();
@@ -383,7 +411,9 @@ ghosts.removeAll(ghostsToRemove);
         }
         foods.remove(foodEaten);
         if (foods.isEmpty()){
+            wins += 1;
             gameOver = true;
+            
         }
     }
     public boolean collision(Block a, Block b){
@@ -463,4 +493,3 @@ ghosts.removeAll(ghostsToRemove);
         }
     }
 }
-
