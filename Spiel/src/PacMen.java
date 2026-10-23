@@ -93,6 +93,7 @@ public class PacMen extends JPanel implements ActionListener,KeyListener {
         private int boardHeight = rowCount * tileSize;
 
         private Image wallImage;
+        private Image secondWallImage;
         private Image blueGhosImage;
         private Image orangeGhostImage;
         private Image pinkGhostImage;
@@ -122,6 +123,7 @@ public class PacMen extends JPanel implements ActionListener,KeyListener {
         String live ="♡";
         boolean scarry = false;
         int wins = 0;
+        int lastScore;
 
 
 
@@ -183,6 +185,7 @@ private String[] tileMapTwo = {
         setFocusable(true);
 
         wallImage = new ImageIcon(getClass().getResource("./wall.png")).getImage();
+        secondWallImage = new ImageIcon(getClass().getResource("./wall2.png")).getImage();
         blueGhosImage = new ImageIcon(getClass().getResource("./blueGhost.png")).getImage();
         orangeGhostImage = new ImageIcon(getClass().getResource("./orangeGhost.png")).getImage();
         pinkGhostImage = new ImageIcon(getClass().getResource("./pinkGhost.png")).getImage();
@@ -225,8 +228,15 @@ private String[] tileMapTwo = {
                 int y = r*tileSize;
 
                 if (tileMapChar == 'X'){
-                    Block wall = new Block(wallImage, x, y, tileSize, tileSize);
-                    walls.add(wall);
+                    if (wins == 0) {
+                        Block wall = new Block(wallImage, x, y, tileSize, tileSize);
+                        walls.add(wall);
+                    }
+                    else {
+                        Block wall = new Block(secondWallImage, x, y, tileSize, tileSize);
+                        walls.add(wall);
+                    }
+                    
                 }
                 else if (tileMapChar == 'b'){
                     Block ghost = new Block(blueGhosImage, x, y, tileSize, tileSize);
@@ -297,7 +307,8 @@ private String[] tileMapTwo = {
             
         }
         for ( Block wall: walls){
-            g.drawImage(wall.image, wall.x, wall.y, wall.width, wall.height, null);
+                g.drawImage(wall.image, wall.x, wall.y, wall.width, wall.height, null);
+            
         }
         for ( Block cherry: cherrys){
             g.drawImage(cherry.image, cherry.x, cherry.y, cherry.width, cherry.height, null);
@@ -412,8 +423,9 @@ ghosts.removeAll(ghostsToRemove);
         foods.remove(foodEaten);
         if (foods.isEmpty()){
             wins += 1;
+            lastScore = score;
             gameOver = true;
-            
+            score = lastScore;
         }
     }
     public boolean collision(Block a, Block b){
